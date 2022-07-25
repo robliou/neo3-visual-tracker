@@ -12,7 +12,6 @@ import QuickStartViewState from "../../../shared/viewState/quickStartViewState";
 import StartNeoExpress from "../quickStart/StartNeoExpress";
 import InvokeContract from "../quickStart/InvokeContract";
 
-//
 import ConnectWallet from "../quickStart/ConnectWallet";
 //Created on 6/22/2022- Rob
 
@@ -103,7 +102,7 @@ export default function QuickStart({ viewState, postMessage }: Props) {
         );
       }
     } else {
-     /*  actions.push(
+      /*  actions.push(
         <ConnectToBlockchain
           key="connectToBlockchain"
           onConnect={() =>
@@ -132,7 +131,8 @@ export default function QuickStart({ viewState, postMessage }: Props) {
             })
           }
         />
-      );} else if (viewState.hasWallets) {
+      );
+    } else if (viewState.hasWallets) {
       actions.push(
         <ConnectWallet
           key="connectWallet"
@@ -143,41 +143,62 @@ export default function QuickStart({ viewState, postMessage }: Props) {
           }
         />
       );
+      actions.push(
+        <ConnectWallet
+          key="connectWallet"
+          onConnectWallet={() =>
+            postMessage({
+              command: "neo3-visual-devtracker.neo.walletConnect",
+            })
+          }
+        />
+      );
+    } else if (viewState.hasWallets) {
+      actions.push(
+        <ConnectWallet
+          key="connectWallet"
+          onConnectWallet={() =>
+            postMessage({
+              command: "neo3-visual-devtracker.neo.walletConnect",
+            })
+          }
+        />
+      );
+      // TODO: Offer to create NEP-6 wallets if there is not one in the workspace
+      // TODO: Offer to create Neo Express wallets if only genesis exists
+      // TODO: Offter to transfer assets between Neo Express wallets if only genesis has funds but other wallets exist
+      // TODO: Offer to create a checkpoint if neo-express is running and sufficiently "interesting"
+      // TODO: Offer to restore a checkpoint if any are present in the workspace
+    } else {
+      actions.push(
+        <CreateOrOpenWorkspace
+          key="createOrOpenWorkspace"
+          onOpen={() => postMessage({ command: "vscode.openFolder" })}
+        />
+      );
     }
-    // TODO: Offer to create NEP-6 wallets if there is not one in the workspace
-    // TODO: Offer to create Neo Express wallets if only genesis exists
-    // TODO: Offter to transfer assets between Neo Express wallets if only genesis has funds but other wallets exist
-    // TODO: Offer to create a checkpoint if neo-express is running and sufficiently "interesting"
-    // TODO: Offer to restore a checkpoint if any are present in the workspace
-  } else {
     actions.push(
-      <CreateOrOpenWorkspace
-        key="createOrOpenWorkspace"
-        onOpen={() => postMessage({ command: "vscode.openFolder" })}
+      <OpenBlockchainExplorer
+        key="openBlockchainExplorer"
+        onOpen={() =>
+          postMessage({ command: "neo3-visual-devtracker.tracker.openTracker" })
+        }
       />
     );
+    return (
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "space-evenly",
+          alignItems: "center",
+          textAlign: "center",
+          minHeight: "calc(100% - 20px)",
+          padding: 10,
+        }}
+      >
+        {actions}
+      </div>
+    );
   }
-  actions.push(
-    <OpenBlockchainExplorer
-      key="openBlockchainExplorer"
-      onOpen={() =>
-        postMessage({ command: "neo3-visual-devtracker.tracker.openTracker" })
-      }
-    />
-  );
-  return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "space-evenly",
-        alignItems: "center",
-        textAlign: "center",
-        minHeight: "calc(100% - 20px)",
-        padding: 10,
-      }}
-    >
-      {actions}
-    </div>
-  );
 }
